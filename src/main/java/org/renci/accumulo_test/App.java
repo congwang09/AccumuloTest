@@ -1,4 +1,4 @@
-package org.renci;
+package org.renci.accumulo_test;
 
 /**
  * Hello world!
@@ -18,15 +18,25 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.BatchWriter;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.Instance;
+import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.client.TableExistsException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.client.ZooKeeperInstance;
 import org.apache.accumulo.core.client.admin.TableOperations;
 import org.apache.accumulo.core.data.Mutation;
 import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.security.Authorizations;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.log4j.Logger;
 import org.apache.hadoop.io.Text;
+
+import org.apache.accumulo.core.data.Key;
+import org.apache.accumulo.core.data.Range;
+import org.apache.accumulo.core.data.Value;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class App {
   public static void main (String[] args) throws AccumuloException, AccumuloSecurityException,TableNotFoundException, TableExistsException{
@@ -72,5 +82,15 @@ public class App {
         bw.close();
 
         System.out.println("checkpoint3");
+
+        Scanner scan = conn.createScanner(tableName, new Authorizations());
+        scan.setRange(new Range("row1", "row1"));
+        Iterator<Map.Entry<Key,Value>> iterator = scan.iterator();
+        while (iterator.hasNext()) {
+        		Map.Entry<Key, Value> entry = iterator.next();
+        		Key key = entry.getKey();
+        		Value gotValue = entry.getValue();
+        		System.out.println(key + " ==> " + gotValue);
+        }
     }
 }
