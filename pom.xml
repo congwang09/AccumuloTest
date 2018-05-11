@@ -22,7 +22,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>org.renci.rya.SparqlTester</mainClass>
+                            <mainClass>org.renci.accumulo_test.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
